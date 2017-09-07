@@ -11,8 +11,7 @@ public:
     typedef typename G::Node Node;
     typedef typename G::E E;
 
-    CEdge(E m_data,Node *a, Node *b, bool m_dir)
-    {
+    CEdge(E m_data,Node *a, Node *b, bool m_dir){
         m_node[0]=a;
         m_node[1]=b;
         this->m_data=m_data;

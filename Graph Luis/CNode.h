@@ -12,11 +12,14 @@ public:
     typedef typename G::N N;
     typedef typename G::Edge Edge;
 
-    CNode(N m_data){
-        this->m_data=m_data;
+    CNode(N m_data_x, N m_data_y){
+        this->m_data_x=m_data_x;
+        this->m_data_y=m_data_y;
     }
 
-    N m_data;
+    N m_data_x;
+    N m_data_y;
+
     vector<Edge*> m_nedges;
 };
 

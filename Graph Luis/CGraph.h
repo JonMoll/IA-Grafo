@@ -8,8 +8,10 @@
 #include <vector>
 #include <fstream>
 
-using namespace std;
+#include <stdlib.h>
+#include <time.h>
 
+using namespace std;
 
 template <class Tr>
 class CGraph
@@ -24,10 +26,12 @@ public:
     vector<Node*> m_nodes;
     vector<Edge*> m_edges;
 
-    bool insert_node(N);
+    bool insert_node(N,N);
     bool insert_edge(E,N,N,bool);
     bool remove_edge(E,N,N);
     bool remove_node(N);
+
+    bool generate_graph(int);
 
     void print();
     void draw();
@@ -45,7 +49,7 @@ void CGraph<Tr>::print()
         cout<<m_edges[i]->m_node[0]->m_data;
         cout<<"  -- "<<m_edges[i]->m_data;
         cout<<" -->   "<<m_edges[i]->m_node[1]->m_data<<endl;
-        if(!m_edges[i]->m_dir) 
+        if(!m_edges[i]->m_dir)
             {
             cout<<m_edges[i]->m_node[1]->m_data;
             cout<<"  -- "<<m_edges[i]->m_data;
@@ -59,21 +63,21 @@ void CGraph<Tr>::draw()
 {
     ofstream file ("graph.dot");
     file<<"digraph G{\n" ;
-    
+
     for (int i=0;i<m_edges.size();i++){
         file<<to_string(m_edges[i]->m_node[0]->m_data)+" -> ";
         file<<to_string(m_edges[i]->m_node[1]->m_data)+"[label=\"";
         file<<m_edges[i]->m_data+"\"]; \n";
     }
-    
+
     file<<"}\n";
     file.close();
     system("dot graph.dot -Tpng -o graph.png");
 }
 
 template <class Tr>
-bool CGraph<Tr>::insert_node(N _data){
-    Node* new_node=new Node(_data);
+bool CGraph<Tr>::insert_node(N _data_x,N _data_y){
+    Node* new_node=new Node(_data_x, _data_y);
     m_nodes.push_back(new_node);
     return 1;
 }
@@ -129,5 +133,25 @@ bool CGraph<Tr>::remove_edge(E _data,N a,N b){
     return 1;
 }
 
+template <class Tr>
+bool CGraph<Tr>::generate_graph(int number_nodes){
+    int mid = number_nodes / 2;
 
-#endif //CGRAPH_H
+    for(int i = 0; i < number_nodes; i++){
+        int x_rand = rand()%number_nodes;
+        int y_rand = rand()%number_nodes;
+        insert_node(x_rand, y_rand);
+
+        cout << x_rand << "    " << y_rand << endl;
+    }
+
+    for(int i = 0; i < 2; i++){
+        for(int j = 0; j < 2; j ++){
+            a
+        }
+    }
+
+    return 1;
+}
+
+#endif
