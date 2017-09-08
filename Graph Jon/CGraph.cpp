@@ -172,14 +172,16 @@ void CGraph::searchBlind(vector<vector<double>> mtrx,vector<CNode> &vect ,int in
                 vect[v].father_y=vect[aux2].y;
 
             }
-        if(vect[v].x==endx and vect[v].y==endy){
-            break;
-        }
+        // cout<<"vect: "<<vect[v].x<<" ";
+        // if(vect[v].x==endx and vect[v].y==endy){
+        //     break;
+        // }
     }
-    if(vect[v].x!=endx and vect[v].y!=endy){
-        cout<<"Error no es posible encontrar camino"<<endl;
-        return;
-    }     
+    // cout<<endl;
+    // if(vect[v].x!=endx and vect[v].y!=endy){
+    //     cout<<"Error no es posible encontrar camino"<<endl;
+    //     return;
+    // }     
     
 
     }
