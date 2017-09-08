@@ -4,7 +4,7 @@ int main()
 {
     srand(time(NULL));
 
-    CGraph my_graph(100);
+    CGraph my_graph(30);
 
     for(int i = 0; i < my_graph.m_number_nodes; i++){
         for(int j = 0; j < my_graph.m_distances[i].size(); j++){
@@ -24,8 +24,13 @@ int main()
                  << endl;
         }
 
+        
+
         cout << endl;
     }
+
+    my_graph.convToMatrix();
+    my_graph.searchBlindAux();
 
     return 0;
 }
