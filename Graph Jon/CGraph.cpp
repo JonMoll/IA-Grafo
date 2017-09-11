@@ -220,7 +220,7 @@ void CGraph::drawGraphviz(){
     file<<"digraph G{\n" ;
 
 
-    for(int i=path.size()-1;i>=0;i--){
+    for(int i=path.size()-1;i>0;i--){
         file<<"\"("+to_string(int(path[i].x))+",";
         file<<to_string(int(path[i].y))+")\"[color=red, penwidth=3.0];\n";
         }
