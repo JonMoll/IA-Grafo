@@ -2,10 +2,11 @@
 #include "dolinearectaobject.h"
 #include "CHillClimbing.h"
 
-DoGraphicsScene::DoGraphicsScene(QObject *parent, CGraph *my_graph, int algoritmo, int nodo_a, int nodo_b) :QGraphicsScene(parent){
+DoGraphicsScene::DoGraphicsScene(QObject *parent, CGraph *my_graph, int algoritmo, int nodo_a, int nodo_b, int *aristas) :QGraphicsScene(parent){
     //srand(time(NULL));
 
     int zoom = 4;
+    *aristas = 0;
 
     if(algoritmo == 0){
         for(int i = 0; i < my_graph->m_number_nodes; i++){
@@ -43,8 +44,28 @@ DoGraphicsScene::DoGraphicsScene(QObject *parent, CGraph *my_graph, int algoritm
                 QPoint a(node_a_x, node_a_y);
                 QPoint b(node_b_x, node_b_y);
 
-                addItem(new DoLineaRectaObject(a, b));
+                addItem(new DoLineaRectaObject(a, b));                
+                *aristas = *aristas + 1;
             }
         }
+    }
+
+    if(algoritmo == 2){
+        my_graph->searchBlindAux(nodo_a, nodo_b);
+
+        for(int i = 0; i < my_graph->path.size() - 1; i++){
+            int node_a_x = my_graph->path[i].x;
+            int node_a_y = my_graph->path[i].y;
+
+            int node_b_x = my_graph->path[i+1].x;
+            int node_b_y = my_graph->path[i+1].y;
+
+            QPoint a(node_a_x, node_a_y);
+            QPoint b(node_b_x, node_b_y);
+
+            addItem(new DoLineaRectaObject(a, b));
+            *aristas = *aristas + 1;
+        }
+
     }
 }

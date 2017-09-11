@@ -10,7 +10,8 @@ class DoGraphicsScene : public QGraphicsScene{
         QPointF mPunto2;
 
     public:
-        DoGraphicsScene(QObject *parent = nullptr, CGraph *my_graph = nullptr, int algoritmo = 0, int nodo_a = 0, int nodo_b = 0);
+        DoGraphicsScene(QObject *parent = nullptr, CGraph *my_graph = nullptr,
+                        int algoritmo = 0, int nodo_a = 0, int nodo_b = 0, int *aristas = 0);
 };
 
 #endif // DOGRAPHICSSCENE_H
