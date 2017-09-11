@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <limits.h>
+#include <fstream>
 
 using namespace std;
 
@@ -35,6 +36,8 @@ class CGraph{
         vector< vector<CDistance> > m_distances;
         vector< vector<double> > matrix_ad;
         
+        vector<CNode> path;
+
         CGraph(int number_nodes);
 
         bool SearchNode(int x, int y);
@@ -45,10 +48,11 @@ class CGraph{
         double Distance(int index_node_a, int index_node_b);
 
         void convToMatrix();
-
         void searchBlindAux();
         void searchBlind(vector<vector<double>>,vector<CNode> &,int,int,int,int);
         int dist_min(int [], bool [],vector<CNode>);
+        
+        void drawGraphviz();
 
 
 

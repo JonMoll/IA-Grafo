@@ -80,6 +80,7 @@ bool CGraph::SearchEdge(int index_node_a, int index_node_b){
 
     return false;
 }
+
 CNode CGraph::SearchNode1(int x, int y){
     for(int i = 0; i < m_nodes.size(); i++){
         if(m_nodes[i].x==x and m_nodes[i].y==y){
@@ -130,6 +131,7 @@ bool CGraph::GenerateEdges(){
     return true;
 }
 
+
 void CGraph::searchBlindAux(){
 
     int rand1= rand() % m_nodes.size();
@@ -143,65 +145,52 @@ void CGraph::searchBlindAux(){
     cout<<"De ("<<begin_x<<" , "<<begin_y<<")";
     cout<<"A ("<<end_x<<" , "<<end_y<<")"<<endl;
 
+    convToMatrix();
     searchBlind(matrix_ad,m_nodes,begin_x,begin_y,end_x,end_y);
-    
 }
 
-void CGraph::searchBlind(vector<vector<double>> mtrx,vector<CNode> &vect ,int inx,int iny,int endx,int endy){
-    int v;
-    int dist[vect.size()]; int aux1;
+
+void  CGraph::searchBlind(vector<vector<double>> mtrx,vector<CNode> &vect ,int inx,int iny,int endx,int endy){
+    int v,aux1;
+    int dist[vect.size()];
     bool status[vect.size()];
-    vector<CNode> path;
+    path.clear();
 
     for (int i = 0; i < vect.size(); i++)
         dist[i] = INT_MAX, status[i] = false;
+    
     for(int j=0;j<vect.size();j++)
         if( vect[j].x==inx and vect[j].y==iny)
             aux1=j;
+    
     dist[aux1] = 0;
    
-    
     for (int i = 0; i < vect.size(); i++){
         int aux2 = dist_min(dist, status,vect);
         status[aux2] = true;
         for ( v = 0; v <vect.size(); v++){
-        if (!status[v] and mtrx[aux2][v] and dist[aux2]!= INT_MAX 
-             and dist[aux2]+mtrx[aux2][v] < dist[v]){
-                dist[v] = dist[aux2] + mtrx[aux2][v];
-                vect[v].father_x=vect[aux2].x;
-                vect[v].father_y=vect[aux2].y;
-
+            if (!status[v] and mtrx[aux2][v] and dist[aux2]!= INT_MAX 
+                and dist[aux2]+mtrx[aux2][v] < dist[v]){
+                    dist[v] = dist[aux2] + mtrx[aux2][v];
+                    vect[v].father_x=vect[aux2].x;
+                    vect[v].father_y=vect[aux2].y;
             }
-        // cout<<"vect: "<<vect[v].x<<" ";
-        // if(vect[v].x==endx and vect[v].y==endy){
-        //     break;
-        // }
-    }
-    // cout<<endl;
-    // if(vect[v].x!=endx and vect[v].y!=endy){
-    //     cout<<"Error no es posible encontrar camino"<<endl;
-    //     return;
-    // }     
-    
-
-    }
+        }
+    }     
     
     CNode tmp=SearchNode1(endx,endy);
     path.push_back(CNode(tmp.x,tmp.y));
     while(tmp.x!=inx and tmp.y!=iny ){
-        // cout<<"data "<<tmp->m_data << " ";
-        // cout<<"father "<<tmp->father << " - ";
         tmp=SearchNode1(tmp.father_x,tmp.father_y);
         path.push_back(CNode(tmp.x,tmp.y));
         }
-    // print();
     cout<<endl<<"CAMINO CIEGO: "<<endl;
     for(int i=path.size()-1;i>=0;i--)
         cout<<"( "<<path[i].x<<" , "<<path[i].y<<")\n";
-        cout<<endl;
-    // print2(dist,in,vect);
+    cout<<endl;
+    
+drawGraphviz();
 }
-
     
 
 int CGraph::dist_min(int dist[], bool status[],vector<CNode> vect){
@@ -213,26 +202,60 @@ int CGraph::dist_min(int dist[], bool status[],vector<CNode> vect){
 }
 
 
-
 void CGraph::convToMatrix(){
 
-
-for(int i=0;i<m_number_nodes;i++){
+    for(int i=0;i<m_number_nodes;i++){
     int node_a,node_b;
     for(int j=0;j<m_distances[i].size(); j++){
         node_a=m_distances[i][j].index_node_a;
         node_b = m_distances[i][j].index_node_b;
         double distance = m_distances[i][j].distance;
         matrix_ad[node_a][node_b]=distance;
+        }
     }
 }
 
+void CGraph::drawGraphviz(){
+    ofstream file ("graph.dot");
+    file<<"digraph G{\n" ;
 
-    // for(int i = 0; i < m_number_nodes; i++){
-    //     for(int j = 0; j < m_number_nodes; j++)
-    //         cout<<matrix_ad[i][j]<<" ";
-    //     cout<<endl;
-    // }
 
+    for(int i=path.size()-1;i>=0;i--){
+        file<<"\"("+to_string(int(path[i].x))+",";
+        file<<to_string(int(path[i].y))+")\"[color=red, penwidth=3.0];\n";
+        }
+
+    for(int i = 0; i < m_number_nodes; i++){
+        for(int j = 0; j < m_distances[i].size(); j++){
+            int index_node_a = m_distances[i][j].index_node_a;
+            int index_node_b = m_distances[i][j].index_node_b;
+            double distance = m_distances[i][j].distance;
+
+            int node_a_x = m_nodes[index_node_a].x;
+            int node_a_y = m_nodes[index_node_a].y;
+
+            int node_b_x = m_nodes[index_node_b].x;
+            int node_b_y = m_nodes[index_node_b].y;
+
+            cout << "( " << node_a_x << ", " << node_a_y << " )"
+                 << "<-----" << distance << "----->"
+                 << "( " << node_b_x << ", " << node_b_y << " )"
+                 << endl;
+
+
+            file<<"\"("+to_string(node_a_x)+","+to_string(node_a_y)+")\" ->";
+            file<<"\"("+to_string(node_b_x)+","+to_string(node_b_y)+")\"[label=\"";
+            file<<to_string(int(distance))+"\"]; \n";
+        }
+    }
+    
+    for(int i=path.size()-1;i>0;i--){
+        file<<"\"("+to_string(int(path[i].x))+","+to_string(int(path[i].y))+")\" ->";
+        file<<"\"("+to_string(int(path[i-1].x))+","+to_string(int(path[i-1].y))+")\" [color=red, penwidth=3.0]; \n";
+        }
+
+    file<<"}\n";
+    file.close();
+    system("dot graph.dot -Tpng -o graph.png");
 
 }
